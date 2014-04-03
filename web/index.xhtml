@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>ZBooking Calendar</title>
+        <h:outputStylesheet name="css/jsfcrud.css"/>
+    </h:head>
+    <h:body>
+        <p:growl id="growl" life="3000" /> 
+
+        <p:layout fullPage="true">
+            <p:layoutUnit position="west" size="250"  collapsible="true">
+                <h:form id="CalendarListForm">
+
+                    <p:dataList value="#{calendarController.active}" var="calendar" id="datalistCalendar"  
+                                paginator="true" rows="10"  
+                                paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"  
+                                rowsPerPageTemplate="5,10,15" type="none">  
+                        <f:facet name="header">  
+                            Active Calendars  
+                        </f:facet>  
+                        <p:commandButton icon="ui-icon-pencil" title="#{bundle.Edit}" 
+                                         update=":CalendarEditForm" 
+                                         oncomplete="PF('CalendarEditDialog').show()">
+                            <f:setPropertyActionListener value="#{calendar}" 
+                                                         target="#{calendarController.selected}" />
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-trash" title="#{bundle.Delete}">                              
+                            <f:setPropertyActionListener value="#{calendar}" target="#{calendarController.selected}" />
+                        </p:commandButton>
+                        <h:outputText value="#{calendar.name}" style="margin-left:5px"/>
+                        <br />  
+                    </p:dataList>
+
+                    <p:commandButton id="createButton" icon="ui-icon-plus"   
+                                     value="#{bundle.Create}" 
+                                     actionListener="#{calendarController.prepareCreate}" 
+                                     update=":CalendarCreateForm" 
+                                     oncomplete="PF('CalendarCreateDialog').show()"/>
+                </h:form>
+                <br />
+                <h:form id="CustomerListForm">
+
+                    <p:dataList value="#{customerController.items}" var="customer" id="datalistCustomer"  
+                                paginator="true" rows="10"  
+                                paginatorTemplate="{PreviousPageLink} {CurrentPageReport} {NextPageLink} {RowsPerPageDropdown}"  
+                                rowsPerPageTemplate="5,10,15" type="none">  
+                        <f:facet name="header">  
+                            Customers  
+                        </f:facet>  
+                        <p:commandButton icon="ui-icon-pencil" title="#{bundle.Edit}" 
+                                         update=":CustomerEditForm" 
+                                         oncomplete="PF('CustomerEditDialog').show()">
+                            <f:setPropertyActionListener value="#{customer}" 
+                                                         target="#{customerController.selected}" />
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-trash" title="#{bundle.Delete}">                              
+                            <f:setPropertyActionListener value="#{customer}" target="#{customerController.selected}" />
+                        </p:commandButton>
+                        <h:outputText value="#{customer.firstName} #{customer.lastName} #{customer.company}" style="margin-left:5px"/>
+                        <br />  
+                    </p:dataList>
+
+                    <p:commandButton id="createButton" icon="ui-icon-plus"   
+                                     value="#{bundle.Create}" 
+                                     actionListener="#{customerController.prepareCreate}" 
+                                     update=":CustomerCreateForm" 
+                                     oncomplete="PF('CustomerCreateDialog').show()"/>
+                </h:form>
+            </p:layoutUnit>
+            <p:layoutUnit position="center">
+                <h:form id="CalendarMenuForm">
+                    <p:toolbar>                         
+                        <p:toolbarGroup align="right">
+                            <p:commandButton type="button" 
+                                             value="Settings" 
+                                             icon="ui-icon-gear"
+                                             id="settingsButton"/>
+                            <p:menu overlay="true" trigger="settingsButton" my="left top" at="left bottom">                     
+                                    <p:menuitem value="Calendars" 
+                                                outcome="calendar/List" 
+                                                icon="ui-icon-calculator"/>  
+                            </p:menu>  
+                        </p:toolbarGroup>
+                    </p:toolbar>
+                </h:form>
+                <br />
+                <h:form id="CalendarViewForm">
+                    <h1>#{calendarController.selected.name}</h1>
+                    <p:schedule id="schedule" widgetVar="scheduler" />  
+                </h:form>
+            </p:layoutUnit>
+        </p:layout>
+
+    </h:body>
+
+    <ui:include src="calendar/Create.xhtml"/>
+    <ui:include src="calendar/Edit.xhtml"/>
+    <ui:include src="customer/Create.xhtml"/>
+    <ui:include src="customer/Edit.xhtml"/>
+
+
+
+
+
+</html>
+

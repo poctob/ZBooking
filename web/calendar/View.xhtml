@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CalendarViewDlg" widgetVar="CalendarViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewCalendarTitle}">
+            <h:form id="CalendarViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{calendarController.selected != null}">
+                        <h:outputText value="#{bundle.ViewCalendarLabel_id}"/>
+                        <h:outputText value="#{calendarController.selected.id}" title="#{bundle.ViewCalendarTitle_id}"/>
+                        <h:outputText value="#{bundle.ViewCalendarLabel_name}"/>
+                        <h:outputText value="#{calendarController.selected.name}" title="#{bundle.ViewCalendarTitle_name}"/>
+                        <h:outputText value="#{bundle.ViewCalendarLabel_isActive}"/>
+                        <h:outputText value="#{calendarController.selected.isActive}" title="#{bundle.ViewCalendarTitle_isActive}"/>
+                        <h:outputText value="#{bundle.ViewCalendarLabel_dateEdited}"/>
+                        <h:outputText value="#{calendarController.selected.dateEdited}" title="#{bundle.ViewCalendarTitle_dateEdited}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewCalendarLabel_startDate}"/>
+                        <h:outputText value="#{calendarController.selected.startDate}" title="#{bundle.ViewCalendarTitle_startDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewCalendarLabel_endDate}"/>
+                        <h:outputText value="#{calendarController.selected.endDate}" title="#{bundle.ViewCalendarTitle_endDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="CalendarViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
