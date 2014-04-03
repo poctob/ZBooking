@@ -70,25 +70,39 @@
                             </h:outputText>
                         </p:column>
                         <f:facet name="footer">
-                            
+
                             <p:panel id="buttonPanel">
-                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{calendarController.prepareCreate}" update=":CalendarCreateForm" oncomplete="PF('CalendarCreateDialog').show()"/>
-                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":CalendarViewForm" oncomplete="PF('CalendarViewDialog').show()" disabled="#{empty calendarController.selected}"/>
-                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":CalendarEditForm" oncomplete="PF('CalendarEditDialog').show()" disabled="#{empty calendarController.selected}"/>
-                            <p:commandButton id="deactivateButton" 
-                                             icon="ui-icon-trash"  
-                                             value="#{bundle.Deactivate}" 
-                                             actionListener="#{calendarController.deactivate}" 
-                                             update=":growl,datalistCalendar" 
-                                             disabled="#{empty calendarController.selected}"
-                                             rendered="#{calendarController.selected.isActive}"/>
-                            
-                            <p:commandButton id="activateButton" icon="ui-icon-check"  
-                                             value="#{bundle.Activate}" 
-                                             actionListener="#{calendarController.activate}" 
-                                             update=":growl,datalistCalendar" 
-                                             disabled="#{empty calendarController.selected}"
-                                             rendered="#{not calendarController.selected.isActive}"/>
+                                <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{calendarController.prepareCreate}" update=":CalendarCreateForm" oncomplete="PF('CalendarCreateDialog').show()"/>
+                                <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":CalendarViewForm" oncomplete="PF('CalendarViewDialog').show()" disabled="#{empty calendarController.selected}"/>
+                                <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":CalendarEditForm" oncomplete="PF('CalendarEditDialog').show()" disabled="#{empty calendarController.selected}"/>
+                                <p:commandButton id="deactivateButton" 
+                                                 icon="ui-icon-circle-close"  
+                                                 value="#{bundle.Deactivate}" 
+                                                 actionListener="#{calendarController.deactivate}" 
+                                                 update=":growl,datalistCalendar" 
+                                                 disabled="#{empty calendarController.selected}"
+                                                 rendered="#{calendarController.selected.isActive}"/>
+
+                                <p:commandButton id="activateButton" icon="ui-icon-check"  
+                                                 value="#{bundle.Activate}" 
+                                                 actionListener="#{calendarController.activate}" 
+                                                 update=":growl,datalistCalendar" 
+                                                 disabled="#{empty calendarController.selected}"
+                                                 rendered="#{not calendarController.selected.isActive}"/>
+
+                                <p:commandButton id="deleteButton" 
+                                                 icon="ui-icon-trash"  
+                                                 value="#{bundle.Delete}" 
+                                                 actionListener="#{calendarController.destroy}" 
+                                                 update=":growl,datalistCalendar" 
+                                                 disabled="#{empty calendarController.selected}">
+                                    <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />  
+                                </p:commandButton>
+
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">  
+                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+                                </p:confirmDialog>  
                             </p:panel>
                         </f:facet>
                     </p:dataTable>

@@ -29,7 +29,11 @@
                             <f:setPropertyActionListener value="#{calendar}" 
                                                          target="#{calendarController.selected}" />
                         </p:commandButton>
-                        <p:commandButton icon="ui-icon-trash" title="#{bundle.Delete}">                              
+                        <p:commandButton icon="ui-icon-copy" 
+                                         title="#{bundle.Copy}"
+                                         actionListener="#{calendarController.copy(calendar)}"
+                                         update=":CalendarListForm:datalistCalendar, :growl"
+                                         >                              
                             <f:setPropertyActionListener value="#{calendar}" target="#{calendarController.selected}" />
                         </p:commandButton>
                         <h:outputText value="#{calendar.name}" style="margin-left:5px"/>

@@ -78,6 +78,14 @@ public class Calendar implements Serializable {
     public Calendar() {
     }
 
+    public Calendar(Calendar source)
+    {
+        this.name=source.name;
+        this.isActive=source.isActive;
+        this.startDate=source.startDate;
+        this.endDate=source.endDate;
+        this.dateEdited=new Date();
+    }
     public Calendar(Integer id) {
         this.id = id;
     }

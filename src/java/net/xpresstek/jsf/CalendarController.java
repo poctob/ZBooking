@@ -66,6 +66,20 @@ public class CalendarController implements Serializable {
             items = null;    // Invalidate list of items to trigger re-query.
         }
     }
+    
+     public void copy(Calendar source) {
+         if(source != null)
+         {
+             Calendar copy = new Calendar(source);
+             copy.setName(copy.getName() + " copy");
+             selected = copy;
+             initializeEmbeddableKey();
+             persist(PersistAction.CREATE, ResourceBundle.getBundle("/Bundle").getString("CalendarCreated"));
+             if (!JsfUtil.isValidationFailed()) {
+                 items = null;    // Invalidate list of items to trigger re-query.
+             }
+         }
+    }
 
     public void update() {
         persist(PersistAction.UPDATE, ResourceBundle.getBundle("/Bundle").getString("CalendarUpdated"));
