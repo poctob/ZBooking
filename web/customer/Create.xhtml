@@ -12,8 +12,6 @@
             <h:form id="CustomerCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{customerController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreateCustomerLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{customerController.selected.id}" title="#{bundle.CreateCustomerTitle_id}" required="true" requiredMessage="#{bundle.CreateCustomerRequiredMessage_id}"/>
                         <p:outputLabel value="#{bundle.CreateCustomerLabel_firstName}" for="firstName" />
                         <p:inputText id="firstName" value="#{customerController.selected.firstName}" title="#{bundle.CreateCustomerTitle_firstName}" />
                         <p:outputLabel value="#{bundle.CreateCustomerLabel_lastName}" for="lastName" />
@@ -29,7 +27,10 @@
                         <p:outputLabel value="#{bundle.CreateCustomerLabel_note}" for="note" />
                         <p:inputTextarea rows="4" cols="30" id="note" value="#{customerController.selected.note}" title="#{bundle.CreateCustomerTitle_note}" />
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{customerController.create}" value="#{bundle.Save}" update="display,:CustomerListForm:datalistCustomer,:growl" oncomplete="handleSubmit(args,'CustomerCreateDialog');"/>
+                    <p:commandButton actionListener="#{customerController.create}" 
+                                     value="#{bundle.Save}" 
+                                     update="display,:CustomerListForm:datalistCustomer,:growl" 
+                                     oncomplete="CustomerCreateDialog.hide()"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="CustomerCreateDialog.hide()"/>
                 </h:panelGroup>
             </h:form>

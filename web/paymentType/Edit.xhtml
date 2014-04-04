@@ -12,14 +12,15 @@
             <h:form id="PaymentTypeEditForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{paymentTypeController.selected != null}">
-                        <p:outputLabel value="#{bundle.EditPaymentTypeLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{paymentTypeController.selected.id}" title="#{bundle.EditPaymentTypeTitle_id}" required="true" requiredMessage="#{bundle.EditPaymentTypeRequiredMessage_id}"/>
                         <p:outputLabel value="#{bundle.EditPaymentTypeLabel_name}" for="name" />
                         <p:inputText id="name" value="#{paymentTypeController.selected.name}" title="#{bundle.EditPaymentTypeTitle_name}" required="true" requiredMessage="#{bundle.EditPaymentTypeRequiredMessage_name}"/>
                         <p:outputLabel value="#{bundle.EditPaymentTypeLabel_note}" for="note" />
                         <p:inputTextarea rows="4" cols="30" id="note" value="#{paymentTypeController.selected.note}" title="#{bundle.EditPaymentTypeTitle_note}" />
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{paymentTypeController.update}" value="#{bundle.Save}" update="display,:PaymentTypeListForm:datalist,:growl" oncomplete="handleSubmit(args, 'PaymentTypeEditDialog');"/>
+                    <p:commandButton actionListener="#{paymentTypeController.update}" 
+                                     value="#{bundle.Save}" 
+                                     update="display,:PaymentTypeListForm:datalist,:growl"
+                                     oncomplete="PaymentTypeEditDialog.hide()"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="PaymentTypeEditDialog.hide()"/>
                 </h:panelGroup>
             </h:form>

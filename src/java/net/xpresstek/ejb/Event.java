@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package net.xpresstek.ejb;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -19,12 +19,14 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -41,6 +43,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Event.findByEventStart", query = "SELECT e FROM Event e WHERE e.eventStart = :eventStart"),
     @NamedQuery(name = "Event.findByEventEnd", query = "SELECT e FROM Event e WHERE e.eventEnd = :eventEnd")})
 public class Event implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,15 +71,14 @@ public class Event implements Serializable {
     @Size(max = 65535)
     @Column(name = "Notes", length = 65535)
     private String notes;
+    @OneToMany(mappedBy = "eventID")
+    private Collection<Payment> paymentCollection;
     @JoinColumn(name = "CustomerID", referencedColumnName = "id")
     @ManyToOne
     private Customer customerID;
     @JoinColumn(name = "CalendarID", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Calendar calendarID;
-    @JoinColumn(name = "PaymentID", referencedColumnName = "id")
-    @ManyToOne
-    private Payment paymentID;
 
     public Event() {
     }
@@ -98,6 +100,15 @@ public class Event implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @XmlTransient
+    public Collection<Payment> getPaymentCollection() {
+        return paymentCollection;
+    }
+
+    public void setPaymentCollection(Collection<Payment> paymentCollection) {
+        this.paymentCollection = paymentCollection;
     }
 
     public String getTitle() {
@@ -156,14 +167,6 @@ public class Event implements Serializable {
         this.calendarID = calendarID;
     }
 
-    public Payment getPaymentID() {
-        return paymentID;
-    }
-
-    public void setPaymentID(Payment paymentID) {
-        this.paymentID = paymentID;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -188,5 +191,5 @@ public class Event implements Serializable {
     public String toString() {
         return "net.xpresstek.ejb.Event[ id=" + id + " ]";
     }
-    
+
 }

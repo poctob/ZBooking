@@ -12,14 +12,15 @@
             <h:form id="PaymentTypeCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{paymentTypeController.selected != null}">
-                        <p:outputLabel value="#{bundle.CreatePaymentTypeLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{paymentTypeController.selected.id}" title="#{bundle.CreatePaymentTypeTitle_id}" required="true" requiredMessage="#{bundle.CreatePaymentTypeRequiredMessage_id}"/>
                         <p:outputLabel value="#{bundle.CreatePaymentTypeLabel_name}" for="name" />
                         <p:inputText id="name" value="#{paymentTypeController.selected.name}" title="#{bundle.CreatePaymentTypeTitle_name}" required="true" requiredMessage="#{bundle.CreatePaymentTypeRequiredMessage_name}"/>
                         <p:outputLabel value="#{bundle.CreatePaymentTypeLabel_note}" for="note" />
                         <p:inputTextarea rows="4" cols="30" id="note" value="#{paymentTypeController.selected.note}" title="#{bundle.CreatePaymentTypeTitle_note}" />
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{paymentTypeController.create}" value="#{bundle.Save}" update="display,:PaymentTypeListForm:datalist,:growl" oncomplete="handleSubmit(args,'PaymentTypeCreateDialog');"/>
+                    <p:commandButton actionListener="#{paymentTypeController.create}" 
+                                     value="#{bundle.Save}" 
+                                     update="display,:PaymentTypeListForm:datalist,:growl" 
+                                     oncomplete="PaymentTypeCreateDialog.hide()"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="PaymentTypeCreateDialog.hide()"/>
                 </h:panelGroup>
             </h:form>

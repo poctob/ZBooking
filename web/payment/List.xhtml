@@ -26,13 +26,7 @@
 
                         <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
                         <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
-
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListPaymentTitle_id}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.id}"/>
-                        </p:column>
+                       
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListPaymentTitle_amount}"/>
@@ -52,6 +46,12 @@
                                 <h:outputText value="#{bundle.ListPaymentTitle_acceptedBy}"/>
                             </f:facet>
                             <h:outputText value="#{item.acceptedBy}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListPaymentTitle_paymentID}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.paymentTypeID}"/>
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{paymentController.prepareCreate}" update=":PaymentCreateForm" oncomplete="PF('PaymentCreateDialog').show()"/>

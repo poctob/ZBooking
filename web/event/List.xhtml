@@ -26,13 +26,6 @@
 
                         <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
                         <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
-
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEventTitle_id}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.id}"/>
-                        </p:column>
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListEventTitle_title}"/>
@@ -79,12 +72,7 @@
                             </f:facet>
                             <h:outputText value="#{item.calendarID}"/>
                         </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListEventTitle_paymentID}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.paymentID}"/>
-                        </p:column>
+                        
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{eventController.prepareCreate}" update=":EventCreateForm" oncomplete="PF('EventCreateDialog').show()"/>
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":EventViewForm" oncomplete="PF('EventViewDialog').show()" disabled="#{empty eventController.selected}"/>

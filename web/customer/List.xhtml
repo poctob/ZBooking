@@ -16,7 +16,7 @@
         <ui:define name="body">
             <h:form id="CustomerListForm">
                 <p:panel header="#{bundle.ListCustomerTitle}">
-                    <p:dataTable id="datalist" value="#{customerController.items}" var="item"
+                    <p:dataTable id="datalistCustomer" value="#{customerController.items}" var="item"
                                  selectionMode="single" selection="#{customerController.selected}"
                                  paginator="true"
                                  rowKey="#{item.id}"
@@ -26,13 +26,7 @@
 
                         <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
                         <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
-
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{bundle.ListCustomerTitle_id}"/>
-                            </f:facet>
-                            <h:outputText value="#{item.id}"/>
-                        </p:column>
+                       
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListCustomerTitle_firstName}"/>
@@ -79,7 +73,7 @@
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{customerController.prepareCreate}" update=":CustomerCreateForm" oncomplete="PF('CustomerCreateDialog').show()"/>
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":CustomerViewForm" oncomplete="PF('CustomerViewDialog').show()" disabled="#{empty customerController.selected}"/>
                             <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":CustomerEditForm" oncomplete="PF('CustomerEditDialog').show()" disabled="#{empty customerController.selected}"/>
-                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{customerController.destroy}" update=":growl,datalist" disabled="#{empty customerController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{customerController.destroy}" update=":growl,datalistCustomer" disabled="#{empty customerController.selected}"/>
                         </f:facet>
                     </p:dataTable>
                 </p:panel>

@@ -7,7 +7,6 @@
 package net.xpresstek.ejb;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -15,16 +14,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -49,7 +48,7 @@ public class Payment implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "amount", nullable = false)
-    private short amount;
+    private double amount;
     @Basic(optional = false)
     @NotNull
     @Column(name = "dateAccepted", nullable = false)
@@ -60,8 +59,12 @@ public class Payment implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "acceptedBy", nullable = false, length = 255)
     private String acceptedBy;
-    @OneToMany(mappedBy = "paymentID")
-    private Collection<Event> eventCollection;
+    @JoinColumn(name = "eventID", referencedColumnName = "id")
+    @ManyToOne
+    private Event eventID;
+    @JoinColumn(name = "paymentTypeID", referencedColumnName = "id")
+    @ManyToOne
+    private PaymentType paymentTypeID;
 
     public Payment() {
     }
@@ -77,6 +80,23 @@ public class Payment implements Serializable {
         this.acceptedBy = acceptedBy;
     }
 
+    public Event getEventID() {
+        return eventID;
+    }
+
+    public void setEventID(Event eventID) {
+        this.eventID = eventID;
+    }
+
+    public PaymentType getPaymentTypeID() {
+        return paymentTypeID;
+    }
+
+    public void setPaymentTypeID(PaymentType paymentTypeID) {
+        this.paymentTypeID = paymentTypeID;
+    }
+    
+    
     public Integer getId() {
         return id;
     }
@@ -85,11 +105,11 @@ public class Payment implements Serializable {
         this.id = id;
     }
 
-    public short getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(short amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
@@ -107,15 +127,6 @@ public class Payment implements Serializable {
 
     public void setAcceptedBy(String acceptedBy) {
         this.acceptedBy = acceptedBy;
-    }
-
-    @XmlTransient
-    public Collection<Event> getEventCollection() {
-        return eventCollection;
-    }
-
-    public void setEventCollection(Collection<Event> eventCollection) {
-        this.eventCollection = eventCollection;
     }
 
     @Override
