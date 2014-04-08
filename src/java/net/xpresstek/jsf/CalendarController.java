@@ -6,6 +6,8 @@ import net.xpresstek.jsf.util.JsfUtil.PersistAction;
 import net.xpresstek.ejb.CalendarFacade;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -21,16 +23,14 @@ import javax.faces.convert.FacesConverter;
 import net.xpresstek.ejb.Event;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
-import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
 @Named("calendarController")
 @SessionScoped
 public class CalendarController implements Serializable {
     
-    private ScheduleModel eventModel;  
-      
-    private ScheduleEvent scheduleEvent = new DefaultScheduleEvent(); 
+    private ScheduleModel eventModel;       
+    private List<Event> events;
 
     @EJB
     private net.xpresstek.ejb.CalendarFacade ejbFacade;
@@ -39,23 +39,27 @@ public class CalendarController implements Serializable {
 
     public CalendarController() {
         eventModel = new DefaultScheduleModel();
+        events =  new ArrayList();
+       
     }
 
     public ScheduleModel getEventModel() {
-        eventModel.clear();
+      /*  eventModel.clear();*/
         EventController ec=EventController.getController();
         if(ec !=null && selected!=null)
         {
-            List<Event> events=ec.getByCalendarID(selected);
+            events=ec.getByCalendarID(selected);
             for(Event e:events)
             {
-                DefaultScheduleEvent event=new DefaultScheduleEvent(e.getTitle(),
+                eventModel.addEvent(new DefaultScheduleEvent(e.getTitle(),
                 e.getEventStart(),
-                e.getEventEnd());
-                event.setId(e.getId().toString());
-                eventModel.addEvent(event);
+                e.getEventEnd(),
+                e));
+               // event.setId(e.getId().toString());
+              //  eventModel.addEvent(event);
             }            
         }
+
         return eventModel;
     }
 

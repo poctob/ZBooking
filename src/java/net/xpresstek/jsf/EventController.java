@@ -15,12 +15,16 @@ import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import net.xpresstek.ejb.Calendar;
+import org.primefaces.event.ScheduleEntryMoveEvent;
+import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.ScheduleEvent;
 
 @Named("eventController")
 @SessionScoped
@@ -123,30 +127,45 @@ public class EventController implements Serializable {
     public List<Event> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
-    
-    public List<Event> getByCalendarID(Calendar calendarID)
-    {
+
+    public List<Event> getByCalendarID(Calendar calendarID) {
         return getFacade().getByCalendarID(calendarID);
     }
-    
-    public static EventController getController()
-    { 
-         FacesContext facesContext = FacesContext.getCurrentInstance();
+
+    public static EventController getController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
         return (EventController) facesContext.getApplication().getELResolver().
-                    getValue(facesContext.getELContext(), null, "eventController");
+                getValue(facesContext.getELContext(), null, "eventController");
     }
-    
-    public void onDateSelect(SelectEvent selectEvent) {  
+
+    public void onDateSelect(SelectEvent selectEvent) {
         selected = new Event();
         selected.setEventStart((Date) selectEvent.getObject());
         selected.setEventEnd((Date) selectEvent.getObject());
         selected.setCalendarID(CalendarController.getController().getSelected());
-        
-    }  
-    
-    public void onCreateCancel()
-    {
-        
+
+    }
+
+    public void onEventSelect(SelectEvent selectEvent) {
+
+        ScheduleEvent event = (ScheduleEvent) selectEvent.getObject();
+        selected = (Event) event.getData();
+    }
+
+    public void onEventMove(ScheduleEntryMoveEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
+
+        addMessage(message);
+    }
+
+    public void onEventResize(ScheduleEntryResizeEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
+
+        addMessage(message);
+    }
+
+    private void addMessage(FacesMessage message) {
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
     @FacesConverter(forClass = Event.class)

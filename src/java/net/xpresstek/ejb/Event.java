@@ -94,6 +94,17 @@ public class Event implements Serializable {
         this.eventStart = eventStart;
         this.eventEnd = eventEnd;
     }
+    
+    public Event(Event source)
+    {
+        this.id = source.id;
+        this.title = source.title;
+        this.eventStart = source.eventStart;
+        this.eventEnd = source.eventEnd;
+        this.notes = source.notes;
+        this.customerID = source.customerID;
+        this.calendarID = source.calendarID;
+    }
 
     public Integer getId() {
         return id;

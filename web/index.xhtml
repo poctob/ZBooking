@@ -112,16 +112,17 @@
                 </h:form>
                 <br />
                 <h:form id="CalendarViewForm">
+                    
                     <h1>#{calendarController.selected.name}</h1>
                     <p:schedule id="schedule" 
                                 value="#{calendarController.eventModel}"
-                                widgetVar="scheduler">  
+                                widgetVar="scheduler"
+                                >  
                         
                         <p:ajax event="dateSelect" 
                                 listener="#{eventController.onDateSelect}" 
                                 oncomplete="PF('EventCreateDialog').show()"
-                                update=":EventCreateForm:display,schedule"/>  
-                        
+                                update=":EventCreateForm:display,CalendarViewForm"/>                          
                         <p:ajax event="eventSelect" 
                                 listener="#{eventController.onEventSelect}" 
                                 oncomplete="PF('EventEditDialog').show()" />  
