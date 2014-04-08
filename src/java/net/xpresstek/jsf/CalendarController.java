@@ -6,8 +6,6 @@ import net.xpresstek.jsf.util.JsfUtil.PersistAction;
 import net.xpresstek.ejb.CalendarFacade;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -21,16 +19,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import net.xpresstek.ejb.Event;
-import org.primefaces.model.DefaultScheduleEvent;
-import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleModel;
 
 @Named("calendarController")
 @SessionScoped
 public class CalendarController implements Serializable {
-    
-    private ScheduleModel eventModel;       
-    private List<Event> events;
 
     @EJB
     private net.xpresstek.ejb.CalendarFacade ejbFacade;
@@ -38,47 +31,41 @@ public class CalendarController implements Serializable {
     private Calendar selected;
 
     public CalendarController() {
-        eventModel = new DefaultScheduleModel();
-        events =  new ArrayList();
        
     }
 
-    public ScheduleModel getEventModel() {
-      /*  eventModel.clear();*/
-        EventController ec=EventController.getController();
-        if(ec !=null && selected!=null)
+    public ScheduleModel getEventModel() {  
+        if(selected != null)
         {
-            events=ec.getByCalendarID(selected);
-            for(Event e:events)
-            {
-                eventModel.addEvent(new DefaultScheduleEvent(e.getTitle(),
-                e.getEventStart(),
-                e.getEventEnd(),
-                e));
-               // event.setId(e.getId().toString());
-              //  eventModel.addEvent(event);
-            }            
+            return selected.getEventModel();
         }
-
-        return eventModel;
-    }
-
-    public void setEventModel(ScheduleModel eventModel) {
-        this.eventModel = eventModel;
+        return null;
     }
     
+    public void updateCalendarEvents()
+    {
+        if(selected != null)
+        {
+            selected.resetEventModel();
+            List<Event> events = 
+                    EventController.getController().getByCalendarID(selected);
+            selected.buildEventModel(events);
+        }
+    }
+      
     
     public List<Calendar> getActive()
     {
         return ejbFacade.findActiveDate();
     }
 
-    public Calendar getSelected() {
+    public Calendar getSelected() {        
         return selected;
     }
 
-    public void setSelected(Calendar selected) {
+    public void setSelected(Calendar selected) {        
         this.selected = selected;
+        updateCalendarEvents();
     }
 
     protected void setEmbeddableKeys() {

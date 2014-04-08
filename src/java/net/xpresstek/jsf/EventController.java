@@ -149,7 +149,10 @@ public class EventController implements Serializable {
     public void onEventSelect(SelectEvent selectEvent) {
 
         ScheduleEvent event = (ScheduleEvent) selectEvent.getObject();
-        selected = (Event) event.getData();
+        if(event!=null && event.getData()!=null)
+        {
+            setSelected(ejbFacade.find((Integer)event.getData()));
+        }
     }
 
     public void onEventMove(ScheduleEntryMoveEvent event) {

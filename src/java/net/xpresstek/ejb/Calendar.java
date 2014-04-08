@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package net.xpresstek.ejb;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,10 +22,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.primefaces.model.DefaultScheduleEvent;
+import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.ScheduleModel;
 
 /**
  *
@@ -47,7 +51,8 @@ import javax.xml.bind.annotation.XmlTransient;
             + "AND c.endDate >= :endDate")})
 
 public class Calendar implements Serializable {
-    private static final long serialVersionUID = 1L;
+
+    private static final long serialVersionUID = 1L; 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -74,20 +79,27 @@ public class Calendar implements Serializable {
     private Date endDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "calendarID")
     private Collection<Event> eventCollection;
+    
+     @Transient
+    private final ScheduleModel eventModel;
 
     public Calendar() {
+        eventModel = new DefaultScheduleModel();
     }
 
-    public Calendar(Calendar source)
-    {
-        this.name=source.name;
-        this.isActive=source.isActive;
-        this.startDate=source.startDate;
-        this.endDate=source.endDate;
-        this.dateEdited=new Date();
+    public Calendar(Calendar source) {
+        this.name = source.name;
+        this.isActive = source.isActive;
+        this.startDate = source.startDate;
+        this.endDate = source.endDate;
+        this.eventCollection = source.eventCollection;
+        this.eventModel = source.eventModel;
+        this.dateEdited = new Date();
     }
+
     public Calendar(Integer id) {
         this.id = id;
+        eventModel = new DefaultScheduleModel();
     }
 
     public Calendar(Integer id, String name, short isActive, Date dateEdited) {
@@ -95,6 +107,29 @@ public class Calendar implements Serializable {
         this.name = name;
         this.isActive = isActive;
         this.dateEdited = dateEdited;
+        eventModel = new DefaultScheduleModel();
+    }
+
+    public void buildEventModel(List<Event> events) {
+        if (eventModel != null && events != null) {
+            for (Event e : events) {
+                eventModel.addEvent(new DefaultScheduleEvent(e.getTitle(),
+                        e.getEventStart(),
+                        e.getEventEnd(),
+                        e.getId()));
+
+            }
+        }
+    }
+
+    public void resetEventModel() {
+        if (eventModel != null) {
+            eventModel.clear();
+        }
+    }
+
+    public ScheduleModel getEventModel() {
+        return eventModel;
     }
 
     public Integer getId() {
@@ -114,11 +149,11 @@ public class Calendar implements Serializable {
     }
 
     public boolean getIsActive() {
-        return isActive==1;
+        return isActive == 1;
     }
 
     public void setIsActive(boolean isActive) {
-        this.isActive = (short)(isActive?1:0);
+        this.isActive = (short) (isActive ? 1 : 0);
     }
 
     public Date getDateEdited() {
@@ -178,5 +213,5 @@ public class Calendar implements Serializable {
     public String toString() {
         return "net.xpresstek.ejb.Calendar[ id=" + id + " ]";
     }
-    
+
 }
