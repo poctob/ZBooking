@@ -18,10 +18,19 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import net.xpresstek.ejb.Event;
+import org.primefaces.model.DefaultScheduleEvent;
+import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.ScheduleEvent;
+import org.primefaces.model.ScheduleModel;
 
 @Named("calendarController")
 @SessionScoped
 public class CalendarController implements Serializable {
+    
+    private ScheduleModel eventModel;  
+      
+    private ScheduleEvent scheduleEvent = new DefaultScheduleEvent(); 
 
     @EJB
     private net.xpresstek.ejb.CalendarFacade ejbFacade;
@@ -29,7 +38,31 @@ public class CalendarController implements Serializable {
     private Calendar selected;
 
     public CalendarController() {
+        eventModel = new DefaultScheduleModel();
     }
+
+    public ScheduleModel getEventModel() {
+        eventModel.clear();
+        EventController ec=EventController.getController();
+        if(ec !=null && selected!=null)
+        {
+            List<Event> events=ec.getByCalendarID(selected);
+            for(Event e:events)
+            {
+                DefaultScheduleEvent event=new DefaultScheduleEvent(e.getTitle(),
+                e.getEventStart(),
+                e.getEventEnd());
+                event.setId(e.getId().toString());
+                eventModel.addEvent(event);
+            }            
+        }
+        return eventModel;
+    }
+
+    public void setEventModel(ScheduleModel eventModel) {
+        this.eventModel = eventModel;
+    }
+    
     
     public List<Calendar> getActive()
     {
@@ -150,6 +183,13 @@ public class CalendarController implements Serializable {
 
     public List<Calendar> getItemsAvailableSelectOne() {
         return getFacade().findAll();
+    }
+    
+     public static CalendarController getController()
+    { 
+         FacesContext facesContext = FacesContext.getCurrentInstance();
+        return (CalendarController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "calendarController");
     }
 
     @FacesConverter(forClass = Calendar.class)

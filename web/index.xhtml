@@ -36,7 +36,13 @@
                                          >                              
                             <f:setPropertyActionListener value="#{calendar}" target="#{calendarController.selected}" />
                         </p:commandButton>
-                        <h:outputText value="#{calendar.name}" style="margin-left:5px"/>
+                        <p:commandLink id="ajax" 
+                                       update=":CalendarViewForm" 
+                                       actionListener="#{calendarController.setSelected(calendar)}" 
+                                       style="margin-right:20px;">  
+                            <h:outputText value="#{calendar.name}" />  
+                        </p:commandLink>  
+
                         <br />  
                     </p:dataList>
 
@@ -85,21 +91,21 @@
                                              icon="ui-icon-gear"
                                              id="settingsButton"/>
                             <p:menu overlay="true" trigger="settingsButton" my="left top" at="left bottom">                     
-                                    <p:menuitem value="Calendars" 
-                                                outcome="calendar/List" 
-                                                icon="ui-icon-calculator"/> 
-                                    <p:menuitem value="Customers" 
-                                                outcome="customer/List" 
-                                                icon="ui-icon-person"/>
-                                    <p:menuitem value="Events" 
-                                                outcome="event/List" 
-                                                icon="ui-icon-flag"/>
-                                    <p:menuitem value="Payments" 
-                                                outcome="payment/List" 
-                                                icon="ui-icon-cart"/>
-                                    <p:menuitem value="Payment Types" 
-                                                outcome="paymentType/List" 
-                                                icon="ui-icon-star"/>
+                                <p:menuitem value="Calendars" 
+                                            outcome="calendar/List" 
+                                            icon="ui-icon-calculator"/> 
+                                <p:menuitem value="Customers" 
+                                            outcome="customer/List" 
+                                            icon="ui-icon-person"/>
+                                <p:menuitem value="Events" 
+                                            outcome="event/List" 
+                                            icon="ui-icon-flag"/>
+                                <p:menuitem value="Payments" 
+                                            outcome="payment/List" 
+                                            icon="ui-icon-cart"/>
+                                <p:menuitem value="Payment Types" 
+                                            outcome="paymentType/List" 
+                                            icon="ui-icon-star"/>
                             </p:menu>  
                         </p:toolbarGroup>
                     </p:toolbar>
@@ -107,10 +113,32 @@
                 <br />
                 <h:form id="CalendarViewForm">
                     <h1>#{calendarController.selected.name}</h1>
-                    <p:schedule id="schedule" widgetVar="scheduler" />  
+                    <p:schedule id="schedule" 
+                                value="#{calendarController.eventModel}"
+                                widgetVar="scheduler">  
+                        
+                        <p:ajax event="dateSelect" 
+                                listener="#{eventController.onDateSelect}" 
+                                oncomplete="PF('EventCreateDialog').show()"
+                                update=":EventCreateForm:display,schedule"/>  
+                        
+                        <p:ajax event="eventSelect" 
+                                listener="#{eventController.onEventSelect}" 
+                                oncomplete="PF('EventEditDialog').show()" />  
+                        <p:ajax event="eventMove" 
+                                listener="#{eventController.onEventMove}" 
+                                update=":growl" />  
+                        <p:ajax event="eventResize" 
+                                listener="#{eventController.onEventResize}" 
+                                update=":growl" />  
+                        
+                    </p:schedule>
                 </h:form>
             </p:layoutUnit>
         </p:layout>
+        <h:form id="EventListForm">
+            <p:panel id="eventDataList" />
+        </h:form>
 
     </h:body>
 
@@ -118,6 +146,8 @@
     <ui:include src="calendar/Edit.xhtml"/>
     <ui:include src="customer/Create.xhtml"/>
     <ui:include src="customer/Edit.xhtml"/>
+    <ui:include src="event/Create.xhtml"/>
+    <ui:include src="event/Edit.xhtml"/>
 
 
 

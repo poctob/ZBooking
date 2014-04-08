@@ -6,6 +6,7 @@ import net.xpresstek.jsf.util.JsfUtil.PersistAction;
 import net.xpresstek.ejb.EventFacade;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -18,6 +19,8 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import net.xpresstek.ejb.Calendar;
+import org.primefaces.event.SelectEvent;
 
 @Named("eventController")
 @SessionScoped
@@ -119,6 +122,31 @@ public class EventController implements Serializable {
 
     public List<Event> getItemsAvailableSelectOne() {
         return getFacade().findAll();
+    }
+    
+    public List<Event> getByCalendarID(Calendar calendarID)
+    {
+        return getFacade().getByCalendarID(calendarID);
+    }
+    
+    public static EventController getController()
+    { 
+         FacesContext facesContext = FacesContext.getCurrentInstance();
+        return (EventController) facesContext.getApplication().getELResolver().
+                    getValue(facesContext.getELContext(), null, "eventController");
+    }
+    
+    public void onDateSelect(SelectEvent selectEvent) {  
+        selected = new Event();
+        selected.setEventStart((Date) selectEvent.getObject());
+        selected.setEventEnd((Date) selectEvent.getObject());
+        selected.setCalendarID(CalendarController.getController().getSelected());
+        
+    }  
+    
+    public void onCreateCancel()
+    {
+        
     }
 
     @FacesConverter(forClass = Event.class)

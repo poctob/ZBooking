@@ -22,6 +22,8 @@
                         </h:outputText>
                         <h:outputText value="#{bundle.ViewPaymentLabel_acceptedBy}"/>
                         <h:outputText value="#{paymentController.selected.acceptedBy}" title="#{bundle.ViewPaymentTitle_acceptedBy}"/>
+                        <h:outputText value="#{bundle.ListPaymentTitle_eventID}"/>
+                        <h:outputText value="#{paymentController.selected.eventID.title}" title="#{bundle.ListPaymentTitle_eventID}"/>
                     </p:panelGrid>
                     <p:commandButton value="#{bundle.Close}" onclick="PaymentViewDialog.hide()"/>
                 </h:panelGroup>

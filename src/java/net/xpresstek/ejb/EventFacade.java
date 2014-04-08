@@ -6,9 +6,11 @@
 
 package net.xpresstek.ejb;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -26,6 +28,14 @@ public class EventFacade extends AbstractFacade<Event> {
 
     public EventFacade() {
         super(Event.class);
+    }
+    
+    public List<Event> getByCalendarID(Calendar calendarID)
+    {
+        TypedQuery<Event> query = getEntityManager().
+                createNamedQuery("Event.findByCalendarID", Event.class);
+        query.setParameter("calendarID", calendarID);
+        return query.getResultList();
     }
     
 }

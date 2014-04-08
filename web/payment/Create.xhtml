@@ -32,6 +32,15 @@
                                            itemValue="#{paymentTypeIDItem}"
                                            itemLabel="#{paymentTypeIDItem.name}"/>
                         </p:selectOneMenu>
+                         <p:outputLabel value="#{bundle.ListPaymentTitle_eventID}" for="eventID" />
+                         <p:selectOneMenu id="eventID" value="#{paymentController.selected.eventID}"
+                                          required="true" 
+                                          requiredMessage="#{bundle.EditPaymentRequiredMessage_eventId}" >
+                            <f:selectItems value="#{eventController.itemsAvailableSelectOne}"
+                                           var="eventIDItem"
+                                           itemValue="#{eventIDItem}"
+                                           itemLabel="#{eventIDItem.title}"/>
+                        </p:selectOneMenu>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{paymentController.create}" value="#{bundle.Save}" update="display,:PaymentListForm:datalist,:growl" oncomplete="handleSubmit(args,'PaymentCreateDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="PaymentCreateDialog.hide()"/>

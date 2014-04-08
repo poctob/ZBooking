@@ -12,41 +12,52 @@
             <h:form id="EventEditForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{eventController.selected != null}">
-                        <p:outputLabel value="#{bundle.EditEventLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{eventController.selected.id}" title="#{bundle.EditEventTitle_id}" required="true" requiredMessage="#{bundle.EditEventRequiredMessage_id}"/>
                         <p:outputLabel value="#{bundle.EditEventLabel_title}" for="title" />
                         <p:inputText id="title" value="#{eventController.selected.title}" title="#{bundle.EditEventTitle_title}" required="true" requiredMessage="#{bundle.EditEventRequiredMessage_title}"/>
                         <p:outputLabel value="#{bundle.EditEventLabel_numberOfGuests}" for="numberOfGuests" />
                         <p:inputText id="numberOfGuests" value="#{eventController.selected.numberOfGuests}" title="#{bundle.EditEventTitle_numberOfGuests}" />
                         <p:outputLabel value="#{bundle.EditEventLabel_eventStart}" for="eventStart" />
-                        <p:calendar id="eventStart" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventController.selected.eventStart}" title="#{bundle.EditEventTitle_eventStart}" required="true" requiredMessage="#{bundle.EditEventRequiredMessage_eventStart}" showOn="button"/>
+                        <p:calendar id="eventStart" pattern="MM/dd/yyyy HH:mm" 
+                                    value="#{eventController.selected.eventStart}" 
+                                    title="#{bundle.EditEventTitle_eventStart}" 
+                                    required="true" 
+                                    requiredMessage="#{bundle.EditEventRequiredMessage_eventStart}" 
+                                    showOn="button"
+                                    showButtonPanel="true"/>
                         <p:outputLabel value="#{bundle.EditEventLabel_eventEnd}" for="eventEnd" />
-                        <p:calendar id="eventEnd" pattern="MM/dd/yyyy HH:mm:ss" value="#{eventController.selected.eventEnd}" title="#{bundle.EditEventTitle_eventEnd}" required="true" requiredMessage="#{bundle.EditEventRequiredMessage_eventEnd}" showOn="button"/>
+                        <p:calendar id="eventEnd" pattern="MM/dd/yyyy HH:mm" 
+                                    value="#{eventController.selected.eventEnd}" 
+                                    title="#{bundle.EditEventTitle_eventEnd}" 
+                                    required="true" 
+                                    requiredMessage="#{bundle.EditEventRequiredMessage_eventEnd}" 
+                                    showOn="button"
+                                    showButtonPanel="true"/>
                         <p:outputLabel value="#{bundle.EditEventLabel_notes}" for="notes" />
                         <p:inputTextarea rows="4" cols="30" id="notes" value="#{eventController.selected.notes}" title="#{bundle.EditEventTitle_notes}" />
                         <p:outputLabel value="#{bundle.EditEventLabel_customerID}" for="customerID" />
                         <p:selectOneMenu id="customerID" value="#{eventController.selected.customerID}" >
-                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
                             <f:selectItems value="#{customerController.itemsAvailableSelectOne}"
                                            var="customerIDItem"
-                                           itemValue="#{customerIDItem}"/>
+                                           itemValue="#{customerIDItem}"
+                                           itemLabel="#{customerIDItem.firstName}&nbsp;
+                                                       #{customerIDItem.lastName}&nbsp;
+                                                       #{customerIDItem.company}"/>
                         </p:selectOneMenu>
-                        <p:outputLabel value="#{bundle.EditEventLabel_calendarID}" for="calendarID" />
-                        <p:selectOneMenu id="calendarID" value="#{eventController.selected.calendarID}" required="true" requiredMessage="#{bundle.EditEventRequiredMessage_calendarID}">
-                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
-                            <f:selectItems value="#{calendarController.itemsAvailableSelectOne}"
+                        <p:outputLabel value="#{bundle.CreateEventLabel_calendarID}" for="calendarID" />
+                        <p:selectOneMenu id="calendarID" value="#{eventController.selected.calendarID}" 
+                                         required="true" 
+                                         requiredMessage="#{bundle.EditEventRequiredMessage_calendarID}">
+                            <f:selectItems value="#{calendarController.active}"
                                            var="calendarIDItem"
-                                           itemValue="#{calendarIDItem}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="#{bundle.EditEventLabel_paymentID}" for="paymentID" />
-                        <p:selectOneMenu id="paymentID" value="#{eventController.selected.paymentID}" >
-                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
-                            <f:selectItems value="#{paymentController.itemsAvailableSelectOne}"
-                                           var="paymentIDItem"
-                                           itemValue="#{paymentIDItem}"/>
-                        </p:selectOneMenu>
+                                           itemValue="#{calendarIDItem}"
+                                           itemLabel="#{calendarIDItem.name}"/>
+                        </p:selectOneMenu>                      
+                    
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{eventController.update}" value="#{bundle.Save}" update="display,:EventListForm:datalist,:growl" oncomplete="handleSubmit(args, 'EventEditDialog');"/>
+                    <p:commandButton actionListener="#{eventController.update}" 
+                                     value="#{bundle.Save}" 
+                                     update="display,:EventListForm:eventDataList,:growl"
+                                     oncomplete="EventCreateDialog.hide()"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="EventEditDialog.hide()"/>
                 </h:panelGroup>
             </h:form>

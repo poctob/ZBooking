@@ -17,9 +17,32 @@
                         <p:outputLabel value="#{bundle.EditPaymentLabel_amount}" for="amount" />
                         <p:inputText id="amount" value="#{paymentController.selected.amount}" title="#{bundle.EditPaymentTitle_amount}" required="true" requiredMessage="#{bundle.EditPaymentRequiredMessage_amount}"/>
                         <p:outputLabel value="#{bundle.EditPaymentLabel_dateAccepted}" for="dateAccepted" />
-                        <p:calendar id="dateAccepted" pattern="MM/dd/yyyy HH:mm:ss" value="#{paymentController.selected.dateAccepted}" title="#{bundle.EditPaymentTitle_dateAccepted}" required="true" requiredMessage="#{bundle.EditPaymentRequiredMessage_dateAccepted}" showOn="button"/>
+                        <p:calendar id="dateAccepted" 
+                                    pattern="MM/dd/yyyy" 
+                                    value="#{paymentController.selected.dateAccepted}" 
+                                    title="#{bundle.EditPaymentTitle_dateAccepted}" 
+                                    required="true" 
+                                    requiredMessage="#{bundle.EditPaymentRequiredMessage_dateAccepted}" 
+                                    showOn="button"
+                                    showButtonPanel="true"/>
                         <p:outputLabel value="#{bundle.EditPaymentLabel_acceptedBy}" for="acceptedBy" />
                         <p:inputText id="acceptedBy" value="#{paymentController.selected.acceptedBy}" title="#{bundle.EditPaymentTitle_acceptedBy}" required="true" requiredMessage="#{bundle.EditPaymentRequiredMessage_acceptedBy}"/>
+                         <p:outputLabel value="#{bundle.ListPaymentTitle_paymentID}" for="paymentTypeID" />
+                        <p:selectOneMenu id="paymentTypeID" value="#{paymentController.selected.paymentTypeID}" >
+                            <f:selectItems value="#{paymentTypeController.itemsAvailableSelectOne}"
+                                           var="paymentTypeIDItem"
+                                           itemValue="#{paymentTypeIDItem}"
+                                           itemLabel="#{paymentTypeIDItem.name}"/>
+                        </p:selectOneMenu>
+                         <p:outputLabel value="#{bundle.ListPaymentTitle_eventID}" for="eventID" />
+                         <p:selectOneMenu id="eventID" value="#{paymentController.selected.eventID}"
+                                          required="true" 
+                                          requiredMessage="#{bundle.EditPaymentRequiredMessage_eventId}" >
+                            <f:selectItems value="#{eventController.itemsAvailableSelectOne}"
+                                           var="eventIDItem"
+                                           itemValue="#{eventIDItem}"
+                                           itemLabel="#{eventIDItem.title}"/>
+                        </p:selectOneMenu>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{paymentController.update}" value="#{bundle.Save}" update="display,:PaymentListForm:datalist,:growl" oncomplete="handleSubmit(args, 'PaymentEditDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="PaymentEditDialog.hide()"/>

@@ -16,7 +16,7 @@
         <ui:define name="body">
             <h:form id="EventListForm">
                 <p:panel header="#{bundle.ListEventTitle}">
-                    <p:dataTable id="datalist" value="#{eventController.items}" var="item"
+                    <p:dataTable id="eventDataList" value="#{eventController.items}" var="item"
                                  selectionMode="single" selection="#{eventController.selected}"
                                  paginator="true"
                                  rowKey="#{item.id}"
@@ -64,21 +64,37 @@
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListEventTitle_customerID}"/>
                             </f:facet>
-                            <h:outputText value="#{item.customerID}"/>
+                            <h:outputText value="#{item.customerID.firstName}&nbsp;
+                                          #{item.customerID.lastName}&nbsp;
+                                          #{item.customerID.company}"/>
                         </p:column>
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.ListEventTitle_calendarID}"/>
                             </f:facet>
-                            <h:outputText value="#{item.calendarID}"/>
+                            <h:outputText value="#{item.calendarID.name}"/>
                         </p:column>
-                        
+
                         <f:facet name="footer">
                             <p:commandButton id="createButton" icon="ui-icon-plus"   value="#{bundle.Create}" actionListener="#{eventController.prepareCreate}" update=":EventCreateForm" oncomplete="PF('EventCreateDialog').show()"/>
                             <p:commandButton id="viewButton"   icon="ui-icon-search" value="#{bundle.View}" update=":EventViewForm" oncomplete="PF('EventViewDialog').show()" disabled="#{empty eventController.selected}"/>
                             <p:commandButton id="editButton"   icon="ui-icon-pencil" value="#{bundle.Edit}" update=":EventEditForm" oncomplete="PF('EventEditDialog').show()" disabled="#{empty eventController.selected}"/>
-                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="#{bundle.Delete}" actionListener="#{eventController.destroy}" update=":growl,datalist" disabled="#{empty eventController.selected}"/>
+                            <p:commandButton id="deleteButton" 
+                                             icon="ui-icon-trash"  
+                                             value="#{bundle.Delete}" 
+                                             actionListener="#{eventController.destroy}" 
+                                             update=":growl,datalist" 
+                                             disabled="#{empty eventController.selected}">
+                                <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" /> 
+                            </p:commandButton>
+
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">  
+                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+                            </p:confirmDialog>  
                         </f:facet>
+
+
                     </p:dataTable>
                 </p:panel>
             </h:form>
