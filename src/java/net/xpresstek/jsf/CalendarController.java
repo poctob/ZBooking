@@ -167,6 +167,15 @@ public class CalendarController implements Serializable {
     public Calendar getCalendar(java.lang.Integer id) {
         return getFacade().find(id);
     }
+    
+    public List<Event> getUpcomingEvents()
+    {
+        if(selected != null)
+        {
+            return EventController.getController().getUpcomingByCalendarID(selected);
+        }
+        return null;
+    }
 
     public List<Calendar> getItemsAvailableSelectMany() {
         return getFacade().findAll();

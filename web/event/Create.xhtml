@@ -51,12 +51,19 @@
                                            var="calendarIDItem"
                                            itemValue="#{calendarIDItem}"
                                            itemLabel="#{calendarIDItem.name}"/>
-                        </p:selectOneMenu>                        
+                        </p:selectOneMenu>  
+                        
+                        <p:outputLabel value="#{bundle.CreateEventLabel_price}" for="price" />
+                        <p:inputText id="price" value="#{eventController.selected.price}" 
+                                     title="#{bundle.CreateEventTitle_price}" 
+                                     required="false"/>
+                        
                     </p:panelGrid>
                     <p:commandButton actionListener="#{eventController.create}" 
+                                     action="#{calendarController.updateCalendarEvents}"
                                      value="#{bundle.Save}" 
                                      update="display,:EventListForm:eventDataList,:growl" 
-                                     oncomplete="EventCreateDialog.hide()"/>
+                                     oncomplete="PF('scheduler').update();EventCreateDialog.hide()"/>
                     <p:commandButton value="#{bundle.Cancel}"                                     
                                      type="reset"
                                      onclick="EventCreateDialog.hide()"/>

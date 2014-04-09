@@ -114,8 +114,8 @@ public class Calendar implements Serializable {
         if (eventModel != null && events != null) {
             for (Event e : events) {
                 eventModel.addEvent(new DefaultScheduleEvent(e.getTitle(),
-                        e.getEventStart(),
-                        e.getEventEnd(),
+                        new Date(e.getEventStart().getTime()),
+                        new Date(e.getEventEnd().getTime()),
                         e.getId()));
 
             }

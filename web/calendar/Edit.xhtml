@@ -20,13 +20,21 @@
                                                   required="true" 
                                                   requiredMessage="#{bundle.CreateCalendarRequiredMessage_isActive}"/>  
                         <p:outputLabel value="#{bundle.EditCalendarLabel_startDate}" for="startDate" />
-                        <p:calendar id="startDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{calendarController.selected.startDate}" title="#{bundle.EditCalendarTitle_startDate}"  showOn="button"/>
+                        <p:calendar id="startDate" pattern="MM/dd/yyyy" 
+                                    value="#{calendarController.selected.startDate}" 
+                                    title="#{bundle.EditCalendarTitle_startDate}"  
+                                    showOn="button" 
+                                    showButtonPanel="true"/>
                         <p:outputLabel value="#{bundle.EditCalendarLabel_endDate}" for="endDate" />
-                        <p:calendar id="endDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{calendarController.selected.endDate}" title="#{bundle.EditCalendarTitle_endDate}"  showOn="button"/>
+                        <p:calendar id="endDate" pattern="MM/dd/yyyy" 
+                                    value="#{calendarController.selected.endDate}" 
+                                    title="#{bundle.EditCalendarTitle_endDate}"  
+                                    showOn="button" 
+                                    showButtonPanel="true"/>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{calendarController.update}" 
                                      value="#{bundle.Save}" 
-                                     update="display,:CalendarListForm:datalistCalendar,:growl, :CalendarViewForm" 
+                                     update="display,:CalendarListForm:datalistCalendar,:growl,:CalendarViewForm,:EventListForm:eventDataList" 
                                      oncomplete="CalendarEditDialog.hide()"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="CalendarEditDialog.hide()"/>
                 </h:panelGroup>

@@ -42,7 +42,11 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Event.findByNumberOfGuests", query = "SELECT e FROM Event e WHERE e.numberOfGuests = :numberOfGuests"),
     @NamedQuery(name = "Event.findByEventStart", query = "SELECT e FROM Event e WHERE e.eventStart = :eventStart"),
     @NamedQuery(name = "Event.findByEventEnd", query = "SELECT e FROM Event e WHERE e.eventEnd = :eventEnd"),
-    @NamedQuery(name = "Event.findByCalendarID", query = "SELECT e FROM Event e WHERE e.calendarID = :calendarID")})
+    @NamedQuery(name = "Event.findByCalendarID", query = "SELECT e FROM Event e WHERE e.calendarID = :calendarID"),
+    @NamedQuery(name = "Event.findByCalendarIDandStart", query = "SELECT e FROM Event e WHERE e.calendarID = :calendarID AND e.eventStart >= :eventStart"),
+    @NamedQuery(name = "Event.findByCalendarIDandEnd", query = "SELECT e FROM Event e "
+            + "WHERE e.calendarID = :calendarID AND e.eventEnd >= :eventEnd "
+            + "ORDER BY e.eventEnd ASC")})
 public class Event implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -72,6 +76,9 @@ public class Event implements Serializable {
     @Size(max = 65535)
     @Column(name = "Notes", length = 65535)
     private String notes;
+    @Basic(optional = true)
+    @Column(name = "Price", nullable = true)
+    private double price;
     @OneToMany(mappedBy = "eventID")
     private Collection<Payment> paymentCollection;
     @JoinColumn(name = "CustomerID", referencedColumnName = "id")
@@ -94,9 +101,8 @@ public class Event implements Serializable {
         this.eventStart = eventStart;
         this.eventEnd = eventEnd;
     }
-    
-    public Event(Event source)
-    {
+
+    public Event(Event source) {
         this.id = source.id;
         this.title = source.title;
         this.eventStart = source.eventStart;
@@ -104,6 +110,7 @@ public class Event implements Serializable {
         this.notes = source.notes;
         this.customerID = source.customerID;
         this.calendarID = source.calendarID;
+        this.price = source.price;
     }
 
     public Integer getId() {
@@ -112,6 +119,14 @@ public class Event implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     @XmlTransient
@@ -179,6 +194,19 @@ public class Event implements Serializable {
         this.calendarID = calendarID;
     }
 
+    public double getAmountRemaining() {
+        double amount_rem = this.price;
+
+        if (paymentCollection != null) {
+            for (Payment payment : paymentCollection) {
+                if (payment != null) {
+                    amount_rem -= payment.getAmount();
+                }
+            }
+        }
+        return amount_rem;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -193,10 +221,7 @@ public class Event implements Serializable {
             return false;
         }
         Event other = (Event) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

@@ -8,12 +8,13 @@
     <h:head>
         <title>ZBooking Calendar</title>
         <h:outputStylesheet name="css/jsfcrud.css"/>
+        <h:outputStylesheet name="css/zcal.css"/>
     </h:head>
     <h:body>
         <p:growl id="growl" life="3000" /> 
 
         <p:layout fullPage="true">
-            <p:layoutUnit position="west" size="250"  collapsible="true">
+            <p:layoutUnit position="west" size="200"  collapsible="true">
                 <h:form id="CalendarListForm">
 
                     <p:dataList value="#{calendarController.active}" var="calendar" id="datalistCalendar"  
@@ -24,20 +25,14 @@
                             Active Calendars  
                         </f:facet>  
                         <p:commandButton icon="ui-icon-pencil" title="#{bundle.Edit}" 
-                                         update=":CalendarEditForm" 
+                                         update=":CalendarEditForm,:EventListForm:eventDataList" 
                                          oncomplete="PF('CalendarEditDialog').show()">
                             <f:setPropertyActionListener value="#{calendar}" 
                                                          target="#{calendarController.selected}" />
                         </p:commandButton>
-                        <p:commandButton icon="ui-icon-copy" 
-                                         title="#{bundle.Copy}"
-                                         actionListener="#{calendarController.copy(calendar)}"
-                                         update=":CalendarListForm:datalistCalendar, :growl"
-                                         >                              
-                            <f:setPropertyActionListener value="#{calendar}" target="#{calendarController.selected}" />
-                        </p:commandButton>
+
                         <p:commandLink id="ajax" 
-                                       update=":CalendarViewForm" 
+                                       update=":CalendarViewForm,:EventListForm:eventDataList" 
                                        actionListener="#{calendarController.setSelected(calendar)}" 
                                        style="margin-right:20px;">  
                             <h:outputText value="#{calendar.name}" />  
@@ -68,9 +63,7 @@
                             <f:setPropertyActionListener value="#{customer}" 
                                                          target="#{customerController.selected}" />
                         </p:commandButton>
-                        <p:commandButton icon="ui-icon-trash" title="#{bundle.Delete}">                              
-                            <f:setPropertyActionListener value="#{customer}" target="#{customerController.selected}" />
-                        </p:commandButton>
+
                         <h:outputText value="#{customer.firstName} #{customer.lastName} #{customer.company}" style="margin-left:5px"/>
                         <br />  
                     </p:dataList>
@@ -112,34 +105,81 @@
                 </h:form>
                 <br />
                 <h:form id="CalendarViewForm">
-                    
+
                     <h1>#{calendarController.selected.name}</h1>
                     <p:schedule id="schedule" 
                                 value="#{calendarController.eventModel}"
                                 widgetVar="scheduler"
+                                styleClass="zcalendar"
                                 >  
-                        
+
                         <p:ajax event="dateSelect" 
                                 listener="#{eventController.onDateSelect}" 
                                 oncomplete="PF('EventCreateDialog').show()"
-                                update=":EventCreateForm:display,CalendarViewForm"/>                          
+                                update=":EventCreateForm:display"/>                          
                         <p:ajax event="eventSelect" 
                                 listener="#{eventController.onEventSelect}" 
+                                update=":EventEditForm:display"
                                 oncomplete="PF('EventEditDialog').show()" />  
                         <p:ajax event="eventMove" 
                                 listener="#{eventController.onEventMove}" 
-                                update=":growl" />  
+                                update=":growl,:EventListForm:eventDataList" />  
                         <p:ajax event="eventResize" 
                                 listener="#{eventController.onEventResize}" 
-                                update=":growl" />  
-                        
+                                update=":growl,:EventListForm:eventDataList" />  
+
                     </p:schedule>
                 </h:form>
             </p:layoutUnit>
+            <p:layoutUnit position="east" size="275"  collapsible="true">
+                <h:form id="EventListForm">
+                    <p:dataGrid value="#{calendarController.upcomingEvents}" 
+                                var="event" 
+                                id="eventDataList"
+                                columns="1"
+                                >  
+
+                        <f:facet name="header">  
+                            Upcoming Events  
+                        </f:facet>  
+
+
+                        <p:panel header="#{event.title}" style="text-align:center">  
+                            <h:panelGrid columns="1" style="width:100%; text-align:left;">  
+                                <p:commandLink 
+                                    actionListener="#{eventController.setSelected(event)}"
+                                    update=":EventEditForm:display"
+                                    oncomplete="PF('EventEditDialog').show()">
+                                    <h:panelGrid id="eventDataGrid" columns="2" border="0">
+                                        <h:outputText value="Customer: " />
+                                        <h:outputText value="#{event.customerID.firstName}&nbsp;
+                                                      #{event.customerID.lastName}" />  
+
+                                        <h:outputText value="Company: " />
+                                        <h:outputText value="#{event.customerID.company}" />  
+
+                                        <h:outputText value="From: " />
+                                        <h:outputText value="#{event.eventStart}">  
+                                            <f:convertDateTime pattern="MM/dd/YYYY hh:mm a" />  
+                                        </h:outputText>
+
+                                        <h:outputText value="To: " />
+                                        <h:outputText value="#{event.eventEnd}">  
+                                            <f:convertDateTime pattern="MM/dd/YYYY hh:mm a" /> 
+                                        </h:outputText>
+
+                                        <h:outputText value="No. of Guests: " />
+                                        <h:outputText value="#{event.numberOfGuests}" />  
+                                    </h:panelGrid>
+                                </p:commandLink>
+
+                            </h:panelGrid>  
+                        </p:panel>  
+                    </p:dataGrid>
+                </h:form>
+            </p:layoutUnit>
         </p:layout>
-        <h:form id="EventListForm">
-            <p:panel id="eventDataList" />
-        </h:form>
+
 
     </h:body>
 
@@ -149,6 +189,8 @@
     <ui:include src="customer/Edit.xhtml"/>
     <ui:include src="event/Create.xhtml"/>
     <ui:include src="event/Edit.xhtml"/>
+    <ui:include src="payment/Create.xhtml"/>
+    <ui:include src="payment/Edit.xhtml"/>
 
 
 

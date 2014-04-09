@@ -21,13 +21,20 @@
                                                   requiredMessage="#{bundle.CreateCalendarRequiredMessage_isActive}"/>  
                       
                         <p:outputLabel value="#{bundle.CreateCalendarLabel_startDate}" for="startDate" />
-                        <p:calendar id="startDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{calendarController.selected.startDate}" title="#{bundle.EditCalendarTitle_startDate}"  showOn="button"/>
+                        <p:calendar id="startDate" pattern="MM/dd/yyyy" 
+                                    value="#{calendarController.selected.startDate}" 
+                                    title="#{bundle.EditCalendarTitle_startDate}"  
+                                    showOn="button"
+                                    showButtonPanel="true"/>
                         <p:outputLabel value="#{bundle.CreateCalendarLabel_endDate}" for="endDate" />
-                        <p:calendar id="endDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{calendarController.selected.endDate}" title="#{bundle.EditCalendarTitle_endDate}"  showOn="button"/>
+                        <p:calendar id="endDate" pattern="MM/dd/yyyy" 
+                                    value="#{calendarController.selected.endDate}" 
+                                    title="#{bundle.EditCalendarTitle_endDate}"  
+                                    showOn="button" showButtonPanel="true"/>
                     </p:panelGrid>
                     <p:commandButton actionListener="#{calendarController.create}" 
                                      value="#{bundle.Save}" 
-                                     update="display,:CalendarListForm:datalistCalendar,:growl, :CalendarViewForm" 
+                                     update="display,:CalendarListForm:datalistCalendar,:growl, :CalendarViewForm,:EventListForm:eventDataList" 
                                      oncomplete="CalendarCreateDialog.hide()"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="CalendarCreateDialog.hide()"/>
                 </h:panelGroup>

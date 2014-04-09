@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package net.xpresstek.ejb;
 
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -18,6 +18,7 @@ import javax.persistence.TypedQuery;
  */
 @Stateless
 public class EventFacade extends AbstractFacade<Event> {
+
     @PersistenceContext(unitName = "ZCalPU")
     private EntityManager em;
 
@@ -29,13 +30,36 @@ public class EventFacade extends AbstractFacade<Event> {
     public EventFacade() {
         super(Event.class);
     }
-    
-    public List<Event> getByCalendarID(Calendar calendarID)
-    {
+
+    public List<Event> getByCalendarID(Calendar calendarID) {
         TypedQuery<Event> query = getEntityManager().
                 createNamedQuery("Event.findByCalendarID", Event.class);
         query.setParameter("calendarID", calendarID);
         return query.getResultList();
     }
-    
+
+    public List<Event> getByCalendarIDandStart(Calendar calendarID, Date start) {
+        Date start_date = new Date();
+        if (start != null) {
+            start_date = start;
+        }
+        TypedQuery<Event> query = getEntityManager().
+                createNamedQuery("Event.findByCalendarIDandStart", Event.class);
+        query.setParameter("calendarID", calendarID);
+        query.setParameter("eventStart", start_date);
+        return query.getResultList();
+    }
+
+    public List<Event> getByCalendarIDandEnd(Calendar calendarID, Date end) {
+        Date end_date = new Date();
+        if (end != null) {
+            end_date = end;
+        }
+        TypedQuery<Event> query = getEntityManager().
+                createNamedQuery("Event.findByCalendarIDandEnd", Event.class);
+        query.setParameter("calendarID", calendarID);
+        query.setParameter("eventEnd", end_date);
+        return query.getResultList();
+    }
+
 }

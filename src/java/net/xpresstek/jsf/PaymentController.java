@@ -18,6 +18,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
+import net.xpresstek.ejb.Event;
 
 @Named("paymentController")
 @SessionScoped
@@ -48,10 +49,22 @@ public class PaymentController implements Serializable {
     private PaymentFacade getFacade() {
         return ejbFacade;
     }
+    
+    public List<Payment> findByEventID(Event event)
+    {
+        return getFacade().findByEventID(event);
+    }
 
     public Payment prepareCreate() {
         selected = new Payment();
         initializeEmbeddableKey();
+        return selected;
+    }
+    
+    public Payment prepareCreateWithEvent(Event event) {
+        selected = new Payment();        
+        initializeEmbeddableKey();
+        selected.setEventID(event);
         return selected;
     }
 

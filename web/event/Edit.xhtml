@@ -40,8 +40,8 @@
                                            var="customerIDItem"
                                            itemValue="#{customerIDItem}"
                                            itemLabel="#{customerIDItem.firstName}&nbsp;
-                                                       #{customerIDItem.lastName}&nbsp;
-                                                       #{customerIDItem.company}"/>
+                                           #{customerIDItem.lastName}&nbsp;
+                                           #{customerIDItem.company}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="#{bundle.CreateEventLabel_calendarID}" for="calendarID" />
                         <p:selectOneMenu id="calendarID" value="#{eventController.selected.calendarID}" 
@@ -51,13 +51,43 @@
                                            var="calendarIDItem"
                                            itemValue="#{calendarIDItem}"
                                            itemLabel="#{calendarIDItem.name}"/>
-                        </p:selectOneMenu>                      
-                    
+                        </p:selectOneMenu>    
+
+                        <p:outputLabel value="#{bundle.CreateEventLabel_price}" for="price" />
+                        <p:inputText id="price" value="#{eventController.selected.price}" 
+                                     title="#{bundle.CreateEventTitle_price}" 
+                                     required="false"/>
+
+                        <p:outputLabel value="#{bundle.EditEventLabel_payments}" for="paymentDataTable" />
+                        <p:dataTable var="payment" value="#{paymentController.findByEventID(eventController.selected)}" id="paymentDataTable">  
+                            <p:column headerText="Date">  
+                                <h:outputText value="#{payment.dateAccepted}">  
+                                    <f:convertDateTime pattern="dd MMM YYYY hh:mm a" />
+                                </h:outputText>
+                            </p:column>  
+                            <p:column headerText="Amount">  
+                                <h:outputText value="#{payment.amount}" />  
+                            </p:column> 
+                            <p:column headerText="Type">  
+                                <h:outputText value="#{payment.paymentTypeID.name}" />  
+                            </p:column> 
+                        </p:dataTable>
+                        <p:outputLabel value="" for="createButton" />
+                        <p:commandButton id="createButton" icon="ui-icon-circle-plus"   
+                                         value="#{bundle.AddPayment}" 
+                                         actionListener="#{paymentController.prepareCreateWithEvent(eventController.selected)}" 
+                                         update=":PaymentCreateForm" 
+                                         oncomplete="PF('PaymentCreateDialog').show()"/>
+
+                        <p:outputLabel value="#{bundle.CreateEventLabel_remaining}" for="remaining" />
+                        <h:outputText id="remaining" value="#{eventController.selected.amountRemaining}"/>
+
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{eventController.update}" 
+                    <p:commandButton actionListener="#{eventController.update}"
+                                     action="#{calendarController.updateCalendarEvents}"
                                      value="#{bundle.Save}" 
                                      update="display,:EventListForm:eventDataList,:growl"
-                                     oncomplete="EventCreateDialog.hide()"/>
+                                     oncomplete="PF('scheduler').update();EventEditDialog.hide()"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="EventEditDialog.hide()"/>
                 </h:panelGroup>
             </h:form>

@@ -29,7 +29,7 @@
                     </p:panelGrid>
                     <p:commandButton actionListener="#{customerController.update}" 
                                      value="#{bundle.Save}" 
-                                     update="display,:CustomerListForm:datalistCustomer,:growl" 
+                                     update="display,:CustomerListForm:datalistCustomer,:growl,:EventListForm:eventDataList" 
                                      oncomplete="CustomerEditDialog.hide()"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="CustomerEditDialog.hide()"/>
                 </h:panelGroup>

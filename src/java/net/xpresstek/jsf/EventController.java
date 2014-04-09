@@ -7,6 +7,7 @@ import net.xpresstek.ejb.EventFacade;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -131,6 +132,10 @@ public class EventController implements Serializable {
     public List<Event> getByCalendarID(Calendar calendarID) {
         return getFacade().getByCalendarID(calendarID);
     }
+    
+    public List<Event> getUpcomingByCalendarID(Calendar calendarID) {
+        return getFacade().getByCalendarIDandEnd(calendarID, new Date());
+    }
 
     public static EventController getController() {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -149,22 +154,56 @@ public class EventController implements Serializable {
     public void onEventSelect(SelectEvent selectEvent) {
 
         ScheduleEvent event = (ScheduleEvent) selectEvent.getObject();
-        if(event!=null && event.getData()!=null)
-        {
-            setSelected(ejbFacade.find((Integer)event.getData()));
+        if (event != null && event.getData() != null) {
+            setSelected(ejbFacade.find((Integer) event.getData()));
         }
     }
 
     public void onEventMove(ScheduleEntryMoveEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
+        ScheduleEvent sevent = event.getScheduleEvent();
+        FacesMessage message = null;
+        if (sevent != null) {
+            if (moveEvent(sevent)) {
+                message = new FacesMessage(
+                        FacesMessage.SEVERITY_INFO, "Event moved", "Event Moved");
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error moving event!", "Error moving event!");
+            }
+            addMessage(message);
+        }
 
-        addMessage(message);
+    }
+
+    private boolean moveEvent(ScheduleEvent sevent) {
+        boolean retval = false;
+
+        if (sevent != null) {
+            Event ev = ejbFacade.find(sevent.getData());
+            if (ev != null) {
+                 ev.setEventStart(new Date(sevent.getStartDate().getTime()));
+                 ev.setEventEnd(new Date(sevent.getEndDate().getTime()));
+
+                setSelected(ev);
+                update();
+                retval = true;
+            }
+        }
+        return retval;
     }
 
     public void onEventResize(ScheduleEntryResizeEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
-
-        addMessage(message);
+        ScheduleEvent sevent = event.getScheduleEvent();
+        if (sevent != null) {
+            FacesMessage message = null;
+           if (moveEvent(sevent)) {      
+                message = new FacesMessage(
+                        FacesMessage.SEVERITY_INFO, "Event adjusted", "Event adjusted");
+            } else {
+                message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Error adjusting event!", "Error adjusting event!");
+            }
+            addMessage(message);
+        }
     }
 
     private void addMessage(FacesMessage message) {
