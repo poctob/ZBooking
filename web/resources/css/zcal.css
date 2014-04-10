@@ -22,3 +22,28 @@ and open the template in the editor.
     padding: 3px;
     font-size: 1.4em;
 }
+
+.eventPast
+{
+    background-color: #8e8989 !important;
+}
+
+.eventPaid
+{
+    background-color: #1d8f37 !important;
+}
+
+.eventUnpaid
+{
+    background-color: #b04b33 !important;
+}
+
+.eventOverpaid
+{
+    background-color: #b51ca7 !important;
+}
+
+.eventPartiallyPaid
+{
+    background-color: #b2b448 !important;
+}

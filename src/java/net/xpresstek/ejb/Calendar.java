@@ -27,6 +27,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import net.xpresstek.jsf.EventController;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleModel;
@@ -52,7 +53,13 @@ import org.primefaces.model.ScheduleModel;
 
 public class Calendar implements Serializable {
 
-    private static final long serialVersionUID = 1L; 
+    private static final String CLASSPAID = "eventPaid";
+    private static final String CLASSUNPAID = "eventUnpaid";
+    private static final String CLASSOVERPAID = "eventOverpaid";
+    private static final String CLASSPARTIALLYPAID = "eventPartiallyPaid";
+    private static final String CLASSPAST = "eventPast";
+
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -79,8 +86,8 @@ public class Calendar implements Serializable {
     private Date endDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "calendarID")
     private Collection<Event> eventCollection;
-    
-     @Transient
+
+    @Transient
     private final ScheduleModel eventModel;
 
     public Calendar() {
@@ -113,12 +120,46 @@ public class Calendar implements Serializable {
     public void buildEventModel(List<Event> events) {
         if (eventModel != null && events != null) {
             for (Event e : events) {
-                eventModel.addEvent(new DefaultScheduleEvent(e.getTitle(),
+                DefaultScheduleEvent event = new DefaultScheduleEvent(e.getTitle(),
                         new Date(e.getEventStart().getTime()),
                         new Date(e.getEventEnd().getTime()),
-                        e.getId()));
+                        e.getId());
+                setEventStyle(event);
+                eventModel.addEvent(event);
 
             }
+        }
+    }
+
+    public static void setEventStyle(DefaultScheduleEvent e) {
+        if (e != null && e.getData() != null) {
+            EventController ec = EventController.getController();
+            Event event = ec.getEvent((Integer) e.getData());
+            double remainingAmount=EventController.getRemainingAmountByEvent(event);
+            
+            if (e.getEndDate().getTime() < new Date().getTime()) {
+                e.setStyleClass(CLASSPAST);
+                return;
+            }
+            
+            if(event.getPrice() >0 && event.getPrice() == remainingAmount)
+            {
+                e.setStyleClass(CLASSUNPAID);
+                return;
+            }
+            
+            if(remainingAmount>0)
+            {
+                e.setStyleClass(CLASSPARTIALLYPAID);
+                return;
+            }
+            
+            if(remainingAmount<0)
+            {
+                e.setStyleClass(CLASSOVERPAID);
+                return;
+            }
+            e.setStyleClass(CLASSPAID);
         }
     }
 

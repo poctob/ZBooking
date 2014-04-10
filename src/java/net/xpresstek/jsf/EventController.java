@@ -7,7 +7,6 @@ import net.xpresstek.ejb.EventFacade;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -22,6 +21,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import net.xpresstek.ejb.Calendar;
+import net.xpresstek.ejb.Payment;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
@@ -88,7 +88,28 @@ public class EventController implements Serializable {
         }
         return items;
     }
+    
+    public double getRemainingAmount()
+    {
+        return getRemainingAmountByEvent(selected);
+    }
 
+    public static double getRemainingAmountByEvent(Event event)
+    {
+         double retval = 0;
+        
+        if(event !=null)
+        {
+            retval = event.getPrice();
+            List<Payment> payments = 
+                    PaymentController.getController().findByEventID(event);
+            for(Payment p : payments)
+            {
+                retval -=p.getAmount();
+            }
+        }
+        return retval;
+    }
     private void persist(PersistAction persistAction, String successMessage) {
         if (selected != null) {
             setEmbeddableKeys();

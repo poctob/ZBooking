@@ -12,8 +12,6 @@
             <h:form id="PaymentEditForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{paymentController.selected != null}">
-                        <p:outputLabel value="#{bundle.EditPaymentLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{paymentController.selected.id}" title="#{bundle.EditPaymentTitle_id}" required="true" requiredMessage="#{bundle.EditPaymentRequiredMessage_id}"/>
                         <p:outputLabel value="#{bundle.EditPaymentLabel_amount}" for="amount" />
                         <p:inputText id="amount" value="#{paymentController.selected.amount}" title="#{bundle.EditPaymentTitle_amount}" required="true" requiredMessage="#{bundle.EditPaymentRequiredMessage_amount}"/>
                         <p:outputLabel value="#{bundle.EditPaymentLabel_dateAccepted}" for="dateAccepted" />
@@ -44,7 +42,9 @@
                                            itemLabel="#{eventIDItem.title}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{paymentController.update}" value="#{bundle.Save}" update="display,:growl,:PaymentListForm:datalist" 
+                    <p:commandButton actionListener="#{paymentController.update}" 
+                                     value="#{bundle.Save}" 
+                                     update="display,:growl,:EventEditForm:display" 
                                      oncomplete="PaymentEditDialog.hide()"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="PaymentEditDialog.hide()"/>
                 </h:panelGroup>

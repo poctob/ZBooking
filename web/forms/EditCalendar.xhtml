@@ -34,7 +34,7 @@
                     </p:panelGrid>
                     <p:commandButton actionListener="#{calendarController.update}" 
                                      value="#{bundle.Save}" 
-                                     update="display,:CalendarListForm:datalistCalendar,:growl" 
+                                     update="display,:CalendarListForm:datalistCalendar,:growl,:CalendarViewForm,:EventListForm:eventDataList" 
                                      oncomplete="CalendarEditDialog.hide()"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="CalendarEditDialog.hide()"/>
                 </h:panelGroup>

@@ -44,8 +44,7 @@
                                            itemLabel="#{eventIDItem.title}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{paymentController.update}" value="#{bundle.Save}" update="display,:growl,:PaymentListForm:datalist" 
-                                     oncomplete="PaymentEditDialog.hide()"/>
+                    <p:commandButton actionListener="#{paymentController.update}" value="#{bundle.Save}" update="display,:growl" oncomplete="handleSubmit(args, 'PaymentEditDialog');"/>
                     <p:commandButton value="#{bundle.Cancel}" onclick="PaymentEditDialog.hide()"/>
                 </h:panelGroup>
             </h:form>

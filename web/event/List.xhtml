@@ -83,7 +83,7 @@
                                              icon="ui-icon-trash"  
                                              value="#{bundle.Delete}" 
                                              actionListener="#{eventController.destroy}" 
-                                             update=":growl,datalist" 
+                                             update=":growl,eventDataList" 
                                              disabled="#{empty eventController.selected}">
                                 <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" /> 
                             </p:commandButton>
@@ -102,6 +102,8 @@
             <ui:include src="Create.xhtml"/>
             <ui:include src="Edit.xhtml"/>
             <ui:include src="View.xhtml"/>
+            <ui:include src="forms/PaymentCreate.xhtml"/>
+            <ui:include src="forms/PaymentEdit.xhtml"/>
         </ui:define>
     </ui:composition>
 

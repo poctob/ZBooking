@@ -8,35 +8,35 @@
 
     <ui:composition>
 
-        <p:dialog id="CalendarEditDlg" widgetVar="CalendarEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditCalendarTitle}">
-            <h:form id="CalendarEditForm">
+        <p:dialog id="CalendarCreateDlg" widgetVar="CalendarCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateCalendarTitle}">
+            <h:form id="CalendarCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{calendarController.selected != null}">
-                        <p:outputLabel value="#{bundle.EditCalendarLabel_name}" for="name" />
-                        <p:inputText id="name" value="#{calendarController.selected.name}" title="#{bundle.EditCalendarTitle_name}" required="true" requiredMessage="#{bundle.EditCalendarRequiredMessage_name}"/>
-                        <p:outputLabel value="#{bundle.EditCalendarLabel_isActive}" for="isActive" />
+                        <p:outputLabel value="#{bundle.CreateCalendarLabel_name}" for="name" />
+                        <p:inputText id="name" value="#{calendarController.selected.name}" title="#{bundle.CreateCalendarTitle_name}" required="true" requiredMessage="#{bundle.CreateCalendarRequiredMessage_name}"/>
+                        <p:outputLabel value="#{bundle.CreateCalendarLabel_isActive}" for="isActive" />
                         <p:selectBooleanCheckbox  id="isActive"
                                                   value="#{calendarController.selected.isActive}"
                                                   required="true" 
                                                   requiredMessage="#{bundle.CreateCalendarRequiredMessage_isActive}"/>  
-                        <p:outputLabel value="#{bundle.EditCalendarLabel_startDate}" for="startDate" />
+                      
+                        <p:outputLabel value="#{bundle.CreateCalendarLabel_startDate}" for="startDate" />
                         <p:calendar id="startDate" pattern="MM/dd/yyyy" 
                                     value="#{calendarController.selected.startDate}" 
                                     title="#{bundle.EditCalendarTitle_startDate}"  
-                                    showOn="button" 
+                                    showOn="button"
                                     showButtonPanel="true"/>
-                        <p:outputLabel value="#{bundle.EditCalendarLabel_endDate}" for="endDate" />
+                        <p:outputLabel value="#{bundle.CreateCalendarLabel_endDate}" for="endDate" />
                         <p:calendar id="endDate" pattern="MM/dd/yyyy" 
                                     value="#{calendarController.selected.endDate}" 
                                     title="#{bundle.EditCalendarTitle_endDate}"  
-                                    showOn="button" 
-                                    showButtonPanel="true"/>
+                                    showOn="button" showButtonPanel="true"/>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{calendarController.update}" 
+                    <p:commandButton actionListener="#{calendarController.create}" 
                                      value="#{bundle.Save}" 
-                                     update="display,:CalendarListForm:datalistCalendar,:growl" 
-                                     oncomplete="CalendarEditDialog.hide()"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="CalendarEditDialog.hide()"/>
+                                     update="display,:CalendarListForm:datalistCalendar,:growl, :CalendarViewForm,:EventListForm:eventDataList" 
+                                     oncomplete="CalendarCreateDialog.hide()"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="CalendarCreateDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

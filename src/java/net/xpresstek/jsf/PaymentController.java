@@ -133,6 +133,12 @@ public class PaymentController implements Serializable {
     public List<Payment> getItemsAvailableSelectOne() {
         return getFacade().findAll();
     }
+    
+    public static PaymentController getController() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        return (PaymentController) facesContext.getApplication().getELResolver().
+                getValue(facesContext.getELContext(), null, "paymentController");
+    }
 
     @FacesConverter(forClass = Payment.class)
     public static class PaymentControllerConverter implements Converter {

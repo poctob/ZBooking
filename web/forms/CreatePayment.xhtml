@@ -8,15 +8,14 @@
 
     <ui:composition>
 
-        <p:dialog id="PaymentEditDlg" widgetVar="PaymentEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditPaymentTitle}">
-            <h:form id="PaymentEditForm">
+        <p:dialog id="PaymentCreateDlg" widgetVar="PaymentCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreatePaymentTitle}">
+            <h:form id="PaymentCreateForm">
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{paymentController.selected != null}">
-                        <p:outputLabel value="#{bundle.EditPaymentLabel_id}" for="id" />
-                        <p:inputText id="id" value="#{paymentController.selected.id}" title="#{bundle.EditPaymentTitle_id}" required="true" requiredMessage="#{bundle.EditPaymentRequiredMessage_id}"/>
-                        <p:outputLabel value="#{bundle.EditPaymentLabel_amount}" for="amount" />
-                        <p:inputText id="amount" value="#{paymentController.selected.amount}" title="#{bundle.EditPaymentTitle_amount}" required="true" requiredMessage="#{bundle.EditPaymentRequiredMessage_amount}"/>
-                        <p:outputLabel value="#{bundle.EditPaymentLabel_dateAccepted}" for="dateAccepted" />
+                        <p:outputLabel value="#{bundle.CreatePaymentLabel_amount}" for="amount" />
+                        <p:inputText id="amount" value="#{paymentController.selected.amount}" title="#{bundle.CreatePaymentTitle_amount}" required="true" requiredMessage="#{bundle.EditPaymentRequiredMessage_amount}"/>
+                        
+                        <p:outputLabel value="#{bundle.CreatePaymentLabel_dateAccepted}" for="dateAccepted" />
                         <p:calendar id="dateAccepted" 
                                     pattern="MM/dd/yyyy" 
                                     value="#{paymentController.selected.dateAccepted}" 
@@ -25,8 +24,8 @@
                                     requiredMessage="#{bundle.EditPaymentRequiredMessage_dateAccepted}" 
                                     showOn="button"
                                     showButtonPanel="true"/>
-                        <p:outputLabel value="#{bundle.EditPaymentLabel_acceptedBy}" for="acceptedBy" />
-                        <p:inputText id="acceptedBy" value="#{paymentController.selected.acceptedBy}" title="#{bundle.EditPaymentTitle_acceptedBy}" required="true" requiredMessage="#{bundle.EditPaymentRequiredMessage_acceptedBy}"/>
+                        <p:outputLabel value="#{bundle.CreatePaymentLabel_acceptedBy}" for="acceptedBy" />
+                        <p:inputText id="acceptedBy" value="#{paymentController.selected.acceptedBy}" title="#{bundle.CreatePaymentTitle_acceptedBy}" required="true" requiredMessage="#{bundle.CreatePaymentRequiredMessage_acceptedBy}"/>
                          <p:outputLabel value="#{bundle.ListPaymentTitle_paymentID}" for="paymentTypeID" />
                         <p:selectOneMenu id="paymentTypeID" value="#{paymentController.selected.paymentTypeID}" >
                             <f:selectItems value="#{paymentTypeController.itemsAvailableSelectOne}"
@@ -44,9 +43,14 @@
                                            itemLabel="#{eventIDItem.title}"/>
                         </p:selectOneMenu>
                     </p:panelGrid>
-                    <p:commandButton actionListener="#{paymentController.update}" value="#{bundle.Save}" update="display,:growl,:PaymentListForm:datalist" 
-                                     oncomplete="PaymentEditDialog.hide()"/>
-                    <p:commandButton value="#{bundle.Cancel}" onclick="PaymentEditDialog.hide()"/>
+                    <p:commandButton actionListener="#{paymentController.create}" 
+                                     value="#{bundle.Save}" 
+                                     update="display,:growl,:EventEditForm:display" 
+                                     oncomplete="PaymentCreateDialog.hide()"/>
+                    <p:commandButton 
+                        value="#{bundle.Cancel}" 
+                        type="reset"
+                        onclick="PaymentCreateDialog.hide()"/>
                 </h:panelGroup>
             </h:form>
         </p:dialog>

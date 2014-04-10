@@ -7,6 +7,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>ZBooking Calendar</title>
+        
+        <link type="text/css" rel="stylesheet" href="/ZCal/faces/javax.faces.resource/theme.css?ln=primefaces-#{themeSwitcher.theme}"/>    
         <h:outputStylesheet name="css/jsfcrud.css"/>
         <h:outputStylesheet name="css/zcal.css"/>
     </h:head>
@@ -101,6 +103,18 @@
                                             icon="ui-icon-star"/>
                             </p:menu>  
                         </p:toolbarGroup>
+                        <p:toolbarGroup align="center">
+                            <h:outputText value="Theme:" />   
+                            <p:themeSwitcher 
+                                value="#{themeSwitcher.theme}" 
+                                style="width:165px" 
+                                effect="fade" 
+                                id="statefulSwitcher">  
+                                <f:selectItem itemLabel="Choose Theme" itemValue="" />  
+                                <f:selectItems value="#{themeSwitcher.themes}" />  
+                                <p:ajax listener="#{themeSwitcher.saveTheme}" />  
+                            </p:themeSwitcher>  
+                        </p:toolbarGroup>
                     </p:toolbar>
                 </h:form>
                 <br />
@@ -183,18 +197,14 @@
 
     </h:body>
 
-    <ui:include src="calendar/Create.xhtml"/>
-    <ui:include src="calendar/Edit.xhtml"/>
-    <ui:include src="customer/Create.xhtml"/>
-    <ui:include src="customer/Edit.xhtml"/>
-    <ui:include src="event/Create.xhtml"/>
-    <ui:include src="event/Edit.xhtml"/>
-    <ui:include src="payment/Create.xhtml"/>
-    <ui:include src="payment/Edit.xhtml"/>
-
-
-
-
+    <ui:include src="forms/CreateCalendar.xhtml"/>
+    <ui:include src="forms/EditCalendar.xhtml"/>
+    <ui:include src="forms/CreateCustomer.xhtml"/>
+    <ui:include src="forms/EditCustomer.xhtml"/>
+    <ui:include src="forms/CreateEvent.xhtml"/>
+    <ui:include src="forms/EditEvent.xhtml"/>
+    <ui:include src="forms/CreatePayment.xhtml"/>
+    <ui:include src="forms/EditPayment.xhtml"/>
 
 </html>
 

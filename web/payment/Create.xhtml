@@ -13,7 +13,8 @@
                 <h:panelGroup id="display">
                     <p:panelGrid columns="2" rendered="#{paymentController.selected != null}">
                         <p:outputLabel value="#{bundle.CreatePaymentLabel_amount}" for="amount" />
-                        <p:inputText id="amount" value="#{paymentController.selected.amount}" title="#{bundle.CreatePaymentTitle_amount}" required="true" requiredMessage="#{bundle.CreatePaymentRequiredMessage_amount}"/>
+                        <p:inputText id="amount" value="#{paymentController.selected.amount}" title="#{bundle.CreatePaymentTitle_amount}" required="true" requiredMessage="#{bundle.EditPaymentRequiredMessage_amount}"/>
+                        
                         <p:outputLabel value="#{bundle.CreatePaymentLabel_dateAccepted}" for="dateAccepted" />
                         <p:calendar id="dateAccepted" 
                                     pattern="MM/dd/yyyy" 
@@ -44,7 +45,7 @@
                     </p:panelGrid>
                     <p:commandButton actionListener="#{paymentController.create}" 
                                      value="#{bundle.Save}" 
-                                     update="display,:growl,:EventEditForm:paymentDataTable" 
+                                     update="display,:growl,:PaymentListForm:datalist" 
                                      oncomplete="PaymentCreateDialog.hide()"/>
                     <p:commandButton 
                         value="#{bundle.Cancel}" 
